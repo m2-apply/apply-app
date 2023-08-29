@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import { LinkedIn } from 'react-linkedin-login-oauth2';
-import linkedin from 'react-linkedin-login-oauth2/assets/linkedin.png';
+import { useLinkedIn } from 'react-linkedin-login-oauth2';
+//import linkedin from 'react-linkedin-login-oauth2/assets/linkedin.png';
 
 const CLIENT_ID = 'linkedin-client-id';
 // const REDIRECT_URI = 'http://localhost:3000';
 const SCOPES = ['r_liteprofile', 'r_emailaddress']; // Adjust scopes as needed
-
-interface LinkedInLoginProps {
-    children: (props: { linkedInLogin: () => void }) => React.ReactNode;
-}
 
 const LoginPage: React.FC = () => {
     const [userProfile, setUserProfile] = useState<any | null>(null);
@@ -26,6 +23,13 @@ const LoginPage: React.FC = () => {
         console.error('LinkedIn Error:', error);
     };
 
+    const { linkedInLogin } = useLinkedIn({
+        clientId: CLIENT_ID,
+        redirectUri: `${window.location.origin}/linkedin`, // for Next.js, you can use `${typeof window === 'object' && window.location.origin}/linkedin`
+        onSuccess: handleSuccess,
+        onError: handleFailure,
+    });
+
     return (
         <div>
             {userProfile ? (
@@ -34,21 +38,12 @@ const LoginPage: React.FC = () => {
                     {/* You can display user details here */}
                 </div>
             ) : (
-                <LinkedIn
-                    clientId={CLIENT_ID}
-                    redirectUri={`${window.location.origin}/linkedin`}
-                    onSuccess={handleSuccess}
-                    onError={handleFailure}
-                >
-                    {({ linkedInLogin }: { linkedInLogin: () => void }) => (
-                        <img
-                            onClick={linkedInLogin}
-                            src={linkedin}
-                            alt="Sign in with LinkedIn"
-                            style={{ maxWidth: '180px', cursor: 'pointer' }}
-                        />
-                    )}
-                </LinkedIn>
+                <img
+                    onClick={linkedInLogin}
+                    //src={linkedin}
+                    alt="Sign in with Linked In"
+                    style={{ maxWidth: '180px', cursor: 'pointer' }}
+                />
             )}
         </div>
     );
