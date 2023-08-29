@@ -1,21 +1,36 @@
-const express = require('express');
+import path from 'path';
+import express from 'express';
 const cookieParser = require('cookie-parser');
-const mongoose = require('mongoose');
-const appRoot = require('app-root-path');
-const paths = appRoot + '/paths';
+const cors = require('cors');
+const bodyParser = require('body-parser');
+
+const axios = require('axios');
+
+import userRouter from './src/routes/userRouter';
 const app = express();
 
+const PORT = 3000;
 // rounters
 
-//parsing chunks
+// parsing chunks
 app.use(express.json());
+app.use(cookieParser());
+app.use(cors({ credentials: true, origin: 'http://localhost:8080' }));
+app.use(bodyParser.json());
+
+app.use(express.static('./dist'));
 
 // router to handle main app
 app.get('/', (req, res) => {
-  res.json(path.join(paths.client, 'client'));
+  res.send('Landing Page');
 });
 
+// api for LinkedOAuth
 app.get('/api/user', userRouter);
+// api for subscriber functions
+// app.get('/api/subList', subListRouter);
+// api for filters
+// app.get('/api/filters', filtersRouter);
 
 // Default unknown page handler
 app.use('*', (req, res) => {
@@ -38,4 +53,4 @@ app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}.`);
 });
 
-module.exports = app;
+export default app;

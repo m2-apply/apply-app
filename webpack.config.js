@@ -32,6 +32,23 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.tsx?$/, // this will apply to both .ts and .tsx files
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                '@babel/preset-env',
+                '@babel/preset-react',
+                '@babel/preset-typescript', // add this preset
+              ],
+            },
+          },
+          'ts-loader', // this will handle TypeScript compilation
+        ],
+      },
       // need to define rules for scss: do it later
       {
         test: /\.s[ac]ss$/i,
