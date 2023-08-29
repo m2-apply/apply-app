@@ -22,7 +22,7 @@ app.use(express.static('./dist'));
 
 // router to handle main app
 app.get('/', (req, res) => {
-  res.send('Landing Page');
+  res.send('Landing Page!');
 });
 
 // api for LinkedOAuth
