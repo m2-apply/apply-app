@@ -1,4 +1,5 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import '../styles/Map';
 import USAMap from '../assets/NorthAmerica2.png';
 import { GlobalContext } from '../../state';
@@ -16,8 +17,9 @@ const MapView = () => {
     curPointer,
     settingNewPoint,
     setSettingNewPoint,
+    
   } = useContext(GlobalContext);
-
+const [pointer, setpointer]= useState([]);
   const handleNewLocation = () => {
     !settingNewPoint ? setSettingNewPoint(true) : setSettingNewPoint(false);
   };
@@ -35,13 +37,39 @@ const MapView = () => {
     Board.push(<Row y={i} />);
   }
 
+  const canvasWidth = 1350
+  const canvasHeight = 835
+  
+
+  useEffect(() => {
+    const canvas = document.getElementById('ellipseCanvas') as HTMLCanvasElement;
+    const ctx = canvas?.getContext('2d');
+
+    const lat = 28.674861072043658;
+    const lon = -81.7639904085645;
+    const x = ((lon + 180) * (1350 / 360) * 2);
+    const y = canvasHeight - ((lat * (canvasHeight / 90)) * 2);
+
+    if (ctx) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = 'rgba(255, 0, 255, 0.8)';
+      ctx.beginPath();
+      ctx.ellipse(x, y, 10, 10, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.closePath();
+    }
+  }, []);
+
   return (
     <div className='map'>
       <div
-        className={`mapCanvas ${settingNewPoint ? 'setting' : ''}`}
+        className={`mapCanvas ${settingNewPoint ? 'setting' : ''}` }
         style={{ position: 'relative' }}>
-        <img src={USAMap} width='1350' />
-        <div className='board'>{Board}</div>
+            <canvas id='ellipseCanvas' width={canvasWidth} height={canvasHeight} style={{position: 'absolute', zIndex: 40}}> </canvas>
+        <img src={USAMap} width='1350' style={{ zIndex: 20 }}/>
+        <div className='board'>{Board}
+        </div>
         <OurPoint x={curPointer[0]} y={curPointer[1]} />
       </div>
 

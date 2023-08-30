@@ -14,10 +14,10 @@ async function auth() {
 const LandingPage = () => {
   const { setLoggedIn } = useContext(GlobalContext);
 
-  const handleLogin = () => {
-    console.log('clicked');
-    auth();
-    // setLoggedIn(true);
+   const handleLogin = () => {
+  //   console.log('clicked');
+  //   auth();
+      setLoggedIn(true);
   };
 
   return (
