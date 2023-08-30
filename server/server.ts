@@ -57,4 +57,11 @@ app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}.`);
 });
 
+
+app.post('/api/login', (req, res) => {
+  console.log('req.body: ', req.body);
+  return res.status(200).json({ message: 'success' });
+});
+
+
 export default app;

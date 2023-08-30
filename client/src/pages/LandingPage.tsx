@@ -7,11 +7,33 @@ import jwt_decode from "jwt-decode";
 import axios from 'axios';
 const CLIENT_ID = "697388643116-ej84pi3l2ahgf8mlu946k9uu6achff46.apps.googleusercontent.com";
 
+type data = {
+  name: string;
+  email: string;
+  picture: string;
+}
+
 const LandingPage = () => {
   const { setLoggedIn } = useContext(GlobalContext);
 
-  const handleLogin = () => {
+  const handleLogin = async (data: data) => {
     console.log('clicked');
+    try {
+      const cleanData = {
+        name: data.name,
+        email: data.email,
+        picture: data.picture
+      }
+      const response = await axios.post('/api/login', cleanData);
+
+      if (response.status === 200) {
+        console.log('Data sent successfully');
+      } else {
+        console.error('Failed to send data');
+      }
+    } catch (error) {
+      console.error('Error in handleLogin:', error);
+    }
     setLoggedIn(true);
   };
 
@@ -30,7 +52,7 @@ const LandingPage = () => {
               console.log(credentialResponse);
               const decoded = jwt_decode(credentialResponse.credential || '');
               console.log(decoded);
-
+              handleLogin(decoded as data);
               setLoggedIn(true);
             }}
             onError={() => {
