@@ -1,0 +1,75 @@
+.map {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 16px;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  min-height: 100vh;
+  gap: 15px;
+  //   background-color: #f3f2f0;
+}
+
+.slider {
+  &.faded {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+    &::-webkit-slider-thumb {
+      color: grey;
+    }
+    &::-webkit-slider-runnable-track {
+      color: rgb(199, 199, 199);
+    }
+  }
+}
+.genericButtonMap {
+  font-weight: 600;
+  height: 45px;
+  width: 185px;
+  border-radius: 23px;
+  border: none;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &.white {
+    background-color: white;
+    color: #0279bc;
+    border: 0.1px solid #0279bc;
+  }
+  &.blue {
+    background-color: #0279bc;
+    color: white;
+  }
+  &.setting {
+    background: linear-gradient(to right, rgb(4, 125, 255), rgb(29, 188, 180));
+    font-weight: 800;
+    color: rgb(255, 255, 255);
+    // border: 2px solid #0279bc;
+  }
+}
+
+.mapCanvas {
+  border: 1px solid #0279bc;
+  height: 835px;
+  border-radius: 10px;
+  overflow: hidden;
+  &.setting {
+    border: 1px solid #0279bc;
+  }
+}
+
+.board {
+  position: absolute;
+  top: -1px;
+  z-index: 101;
+  width: 1350px;
+  height: 835px;
+  display: flex;
+  flex-direction: column;
+}
