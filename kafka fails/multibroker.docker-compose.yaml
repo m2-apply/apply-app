@@ -1,0 +1,45 @@
+version: '3'
+services:
+  seismicProducer:
+    image: node:16
+    container_name: seismic_data_us_prod
+    volumes:
+      - ./seismicProducer.ts:/seismicProducer.ts
+      - ./topics.ts:/topics.ts
+      - ./node_modules:/node_modules
+      - ./tsconfig.json:/tsconfig.json
+      - ./package.json:/package.json
+    # ports:
+    #   - '3000:3000'
+    command: npx ts-node-dev seismicProducer.ts
+    environment:
+      KAFKA_BROKER: redpanda:29092
+    depends_on:
+      - redpanda
+
+  seismicConsumer:
+    image: node:16
+    container_name: seismic_data_us_con
+    volumes:
+      - ./seismicConsumer.ts:/seismicConsumer.ts
+      - ./topics.ts:/topics.ts
+      - ./node_modules:/node_modules
+      - ./tsconfig.json:/tsconfig.json
+      - ./package.json:/package.json
+    ports:
+      - '3000:3000'
+    command: npx ts-node-dev seismicConsumer.ts
+    environment:
+      KAFKA_BROKER: redpanda:29092
+    depends_on:
+      - redpanda
+
+  redpanda:
+    image: docker.redpanda.com/vectorized/redpanda:v22.2.2
+    container_name: seismic_broker
+    command:
+      - redpanda start
+      - --kafka-addr PLAINTEXT://0.0.0.0:29092
+      - --advertise-kafka-addr PLAINTEXT://redpanda:29092
+    ports:
+      - 29092:29092
