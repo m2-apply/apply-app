@@ -38,7 +38,7 @@ const [pointer, setpointer]= useState([]);
   }
 
   const canvasWidth = 1350
-  const canvasHeight = 410
+  const canvasHeight = 835
   
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const [pointer, setpointer]= useState([]);
     const lat = 28.674861072043658;
     const lon = -81.7639904085645;
     const x = ((lon + 180) * (1350 / 360) * 2);
-    const y = 410 - ((lat * (410 / 90)) * 2);
+    const y = canvasHeight - ((lat * (canvasHeight / 90)) * 2);
 
     if (ctx) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -64,11 +64,11 @@ const [pointer, setpointer]= useState([]);
   return (
     <div className='map'>
       <div
-        className={`mapCanvas ${settingNewPoint ? 'setting' : ''}`}
+        className={`mapCanvas ${settingNewPoint ? 'setting' : ''}` }
         style={{ position: 'relative' }}>
-        <img src={USAMap} width='1350' />
+            <canvas id='ellipseCanvas' width={canvasWidth} height={canvasHeight} style={{position: 'absolute', zIndex: 40}}> </canvas>
+        <img src={USAMap} width='1350' style={{ zIndex: 20 }}/>
         <div className='board'>{Board}
-          {/* <canvas id='ellipseCanvas' width={canvasWidth} height={canvasHeight}> </canvas> */}
         </div>
         <OurPoint x={curPointer[0]} y={curPointer[1]} />
       </div>
