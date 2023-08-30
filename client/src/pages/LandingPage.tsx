@@ -17,7 +17,7 @@ const LandingPage = () => {
   const handleLogin = () => {
     console.log('clicked');
     auth();
-    // setLoggedIn(true);
+    setLoggedIn(true);
   };
 
   return (
