@@ -32,10 +32,14 @@ app.get('/api/user', userRouter);
 // api for filters
 // app.get('/api/filters', filtersRouter);
 
-// Default unknown page handler
-app.use('*', (req, res) => {
-  res.status(404).send('Error: Page not found.');
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, './dist/index.html'));
 });
+
+// // Default unknown page handler
+// app.use('*', (req, res) => {
+//   res.status(404).send('Error: Page not found.');
+// });
 
 // Express error handler
 app.use((err, req, res, next) => {

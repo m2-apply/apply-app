@@ -1,44 +1,27 @@
-import React, { useState, useReducer } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import SockJS from 'sockjs-client';
+import React, { useContext } from 'react';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import LandingPage from './src/pages/LandingPage';
+import MapView from './src/pages/Map';
+import { GlobalContext } from './state';
 
 const App = () => {
-  var sock = new SockJS('https://www.seismicportal.eu/standing_order');
-
-  sock.onopen = function () {
-    console.log('connected');
-  };
-
-  sock.onmessage = function (e) {
-    let msg = JSON.parse(e.data);
-    const latitude = msg.data.properties.lat;
-    const longitude = msg.data.properties.lon;
-
-    if (
-      latitude >= 20 &&
-      latitude <= 60 &&
-      longitude <= -50 &&
-      longitude >= -140
-    ) {
-      const filteredMsg = {
-        id: msg.data.id,
-        depth: msg.data.properties.depth,
-        lat: latitude,
-        lon: longitude,
-        mag: msg.data.properties.mag,
-        magtype: msg.data.properties.magtype,
-        time: msg.data.properties.time,
-      };
-      console.log('filteredMsg', filteredMsg);
-    }
-
-    // console.log('message received : ', msg);
-  };
-
-  sock.onclose = function () {
-    console.log('disconnected');
-  };
-  return <div>hello</div>;
+  const { isLoggedIn } = useContext(GlobalContext);
+  return (
+    <div style={{ minHeight: '100vh' }}>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path='/'
+            element={isLoggedIn ? <Navigate to='/map' /> : <LandingPage />}
+          />
+          <Route
+            path='/map'
+            element={isLoggedIn ? <MapView /> : <Navigate to='/' />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
 };
 
 export default App;

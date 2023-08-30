@@ -14,6 +14,7 @@ module.exports = {
     },
     compress: true,
     port: 8080,
+    historyApiFallback: true,
   },
   module: {
     rules: [
@@ -62,6 +63,17 @@ module.exports = {
           'sass-loader',
         ],
       },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+          },
+        ],
+      },
     ],
+  },
+  resolve: {
+    extensions: ['.scss', '.tsx', '.ts', '.js', '.json'],
   },
 };
