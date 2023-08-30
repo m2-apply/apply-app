@@ -10,7 +10,8 @@
     "dev:server": "ts-node-dev ./server/server.ts",
     "dev:client": "webpack server",
     "start:producer": "ts-node-esm ./seismicProducer.ts",
-    "dev:consumer": "ts-node-dev ./seismicConsumer.ts"
+    "dev:consumer": "ts-node-dev ./seismicConsumer.ts",
+    "start:selenium": "node e2e/seleniumTest.js"
   },
   "repository": {
     "type": "git",
