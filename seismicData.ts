@@ -93,30 +93,33 @@ const run = async () => {
             console.log('exists', exists);
             console.log('data', data);
             exists = data;
+            // update table if the message contains earthquake updates
+            if (exists) {
+              // update created_at column to reflect the update time
+              const date = new Date();
+              values.push(date.toISOString());
+              db.query(
+                'UPDATE earthquakes SET depth = $2, lat = $3, lon = $4, mag = $5, magtype = $6, time = $7, created_at = $8 WHERE sp_id = $1',
+                values,
+              )
+                .then(data => console.log('update', data.rows[0]))
+                .catch(err =>
+                  console.log('error updating earthquake table', err),
+                );
+            }
+            // add earthquake to table if new earthquake report was received
+            else {
+              db.query(
+                'INSERT INTO earthquakes (sp_id, depth, lat, lon, mag, magtype, time) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+                values,
+              )
+                .then(data => console.log('insert', data.rows[0]))
+                .catch(err =>
+                  console.log('error inserting data into db: ', err),
+                );
+            }
           })
           .catch(err => console.log('error checking earthquake table:', err));
-
-        // update table if the message contains earthquake updates
-        if (exists) {
-          // update created_at column to reflect the update time
-          const date = new Date();
-          values.push(date.toISOString());
-          db.query(
-            'UPDATE earthquakes SET depth = $2, lat = $3, lon = $4, mag = $5, magtype = $6, time = $7, created_at = $8 WHERE sp_id = $1',
-            values,
-          )
-            .then(data => console.log(data.rows[0]))
-            .catch(err => console.log('error updating earthquake table', err));
-        }
-        // add earthquake to table if new earthquake report was received
-        else {
-          db.query(
-            'INSERT INTO earthquakes (sp_id, depth, lat, lon, mag, magtype, time) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-            values,
-          )
-            .then(data => console.log(data.rows[0]))
-            .catch(err => console.log('error inserting data into db: ', err));
-        }
       }
     },
   });
