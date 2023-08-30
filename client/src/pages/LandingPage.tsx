@@ -4,6 +4,7 @@ import logo from '../assets/Apply.png';
 import { GlobalContext } from '../../state';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import jwt_decode from "jwt-decode";
+import axios from 'axios';
 const CLIENT_ID = "697388643116-ej84pi3l2ahgf8mlu946k9uu6achff46.apps.googleusercontent.com";
 
 const LandingPage = () => {
@@ -29,6 +30,7 @@ const LandingPage = () => {
               console.log(credentialResponse);
               const decoded = jwt_decode(credentialResponse.credential || '');
               console.log(decoded);
+
               setLoggedIn(true);
             }}
             onError={() => {
