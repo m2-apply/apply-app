@@ -24,17 +24,18 @@ const LandingPage = () => {
         email: data.email,
         picture: data.picture
       }
+
       const response = await axios.post('/api/login', cleanData);
 
       if (response.status === 200) {
         console.log('Data sent successfully');
+        setLoggedIn(true);
       } else {
         console.error('Failed to send data');
       }
     } catch (error) {
       console.error('Error in handleLogin:', error);
     }
-    setLoggedIn(true);
   };
 
   return (
@@ -53,7 +54,7 @@ const LandingPage = () => {
               const decoded = jwt_decode(credentialResponse.credential || '');
               console.log(decoded);
               handleLogin(decoded as data);
-              setLoggedIn(true);
+              //setLoggedIn(true);
             }}
             onError={() => {
               console.log('Login Failed');
