@@ -25,7 +25,7 @@ const LandingPage = () => {
         picture: data.picture
       }
 
-      const response = await axios.post('http://localhost:3001/api/login', cleanData);
+      const response = await axios.post('/api/login', cleanData);
 
       if (response.status === 200) {
         console.log('Data sent successfully');
