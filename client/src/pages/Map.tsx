@@ -5,6 +5,8 @@ import { GlobalContext } from '../../state';
 import { Unit, Row } from '../components/Unit';
 import OurPoint from '../components/OurPoint';
 
+const unit: number = 0.1880630631;
+
 const MapView = () => {
   const {
     setLoggedIn,
@@ -35,19 +37,23 @@ const MapView = () => {
 
   return (
     <div className='map'>
-      <div className='mapCanvas' style={{ position: 'relative' }}>
+      <div
+        className={`mapCanvas ${settingNewPoint ? 'setting' : ''}`}
+        style={{ position: 'relative' }}>
         <img src={USAMap} width='1350' />
         <div className='board'>{Board}</div>
         <OurPoint x={curPointer[0]} y={curPointer[1]} />
       </div>
 
-      <div>Approx Radius: {(pointerRadius * 5.3173652695).toFixed(2)}km</div>
+      <div style={{ marginTop: '-50px', marginBottom: '15px', zIndex: 200 }}>
+        Approx. Seismic Radius: {(pointerRadius * 5.3173652695).toFixed(2)}km
+      </div>
 
       <div style={{ display: 'flex', gap: '5px' }}>
         <input
           type='range'
-          min='50'
-          max='500'
+          min={unit * 50}
+          max={unit * 2000}
           value={pointerRadius}
           class={`${settingNewPoint ? 'slider' : 'slider faded'}`}
           onChange={handleChange}></input>

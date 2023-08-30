@@ -9,7 +9,8 @@
   align-items: center;
   position: relative;
   min-height: 100vh;
-  gap: 30px;
+  gap: 15px;
+  //   background-color: #f3f2f0;
 }
 
 .slider {
@@ -39,7 +40,7 @@
   &.white {
     background-color: white;
     color: #0279bc;
-    border: 2px solid #0279bc;
+    border: 0.1px solid #0279bc;
   }
   &.blue {
     background-color: #0279bc;
@@ -54,15 +55,19 @@
 }
 
 .mapCanvas {
-  border: 2px solid #0279bc;
+  border: 1px solid #0279bc;
   height: 835px;
+  border-radius: 10px;
   overflow: hidden;
+  &.setting {
+    border: 1px solid #0279bc;
+  }
 }
 
 .board {
   position: absolute;
-  top: 0;
-  z-index: 100;
+  top: -1px;
+  z-index: 101;
   width: 1350px;
   height: 835px;
   display: flex;

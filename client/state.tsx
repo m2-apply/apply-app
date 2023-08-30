@@ -26,7 +26,7 @@ type State = {
 export const GlobalContext = createContext<State>({});
 
 // counting 0.5
-const multiplier: number = 1;
+const multiplier: number = 2;
 
 const longitude: number = (60 - 20) * multiplier;
 const latitude: number = (140 - 50) * multiplier;

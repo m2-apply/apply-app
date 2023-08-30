@@ -13,7 +13,7 @@ const LandingPage = () => {
 
   return (
     <div className='landingPage'>
-      <img src={logo} width='80' />
+      <img src={logo} width='150' />
       <div>Hello World!</div>
       <div>Welcome to Seismic</div>
       <div style={{ display: 'flex', gap: '15px' }}>
