@@ -3,12 +3,21 @@ import '../styles/LandingPage';
 import logo from '../assets/Apply.png';
 import { GlobalContext } from '../../state';
 
+async function auth() {
+  const res = await fetch(`/api/user/login`, {
+    method: 'POST',
+  });
+  const data = await res.json();
+  window.location.href = data.url;
+}
+
 const LandingPage = () => {
   const { setLoggedIn } = useContext(GlobalContext);
 
   const handleLogin = () => {
     console.log('clicked');
-    setLoggedIn(true);
+    auth();
+    // setLoggedIn(true);
   };
 
   return (

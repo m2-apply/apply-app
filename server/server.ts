@@ -7,8 +7,9 @@ const bodyParser = require('body-parser');
 const axios = require('axios');
 
 import userRouter from './src/routes/userRouter';
-const app = express();
+import { startWebsocketServer } from './src/config/webSocket';
 
+const app = express();
 const PORT = 3000;
 // rounters
 
@@ -26,20 +27,16 @@ app.get('/', (req, res) => {
 });
 
 // api for LinkedOAuth
-app.get('/api/user', userRouter);
+app.use('/api/user', userRouter);
 // api for subscriber functions
 // app.get('/api/subList', subListRouter);
 // api for filters
 // app.get('/api/filters', filtersRouter);
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './dist/index.html'));
-});
-
 // // Default unknown page handler
-// app.use('*', (req, res) => {
-//   res.status(404).send('Error: Page not found.');
-// });
+app.use('*', (req, res) => {
+  res.status(404).send('Error: Page not found.');
+});
 
 // Express error handler
 app.use((err, req, res, next) => {
@@ -55,6 +52,7 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}.`);
+  startWebsocketServer();
 });
 
 export default app;
