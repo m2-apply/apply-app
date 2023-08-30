@@ -1,12 +1,9 @@
-import fs from 'fs';
-import path from 'path';
-// import { fileURLToPath } from 'url';
-// const __dirname = path.dirname(fileURLToPath(import.meta.url));
 import SockJS from 'sockjs-client';
 import { Kafka, logLevel } from 'kafkajs';
 import { KafkaTopics } from './topics';
+import db from './server/src/config/postgresSchema';
 
-//! initialize producer and consumer
+// initialize producer and consumer
 const KAFKA_BROKER_ADDRESS = process.env.KAFKA_BROKER!;
 const kafka = new Kafka({
   brokers: [KAFKA_BROKER_ADDRESS],
@@ -15,7 +12,7 @@ const kafka = new Kafka({
 const producer = kafka.producer();
 const consumer = kafka.consumer({ groupId: 'seismic-consumer' });
 
-//! open seismic portal websocket connection
+// open seismic portal websocket connection
 const sock: any = new SockJS('https://www.seismicportal.eu/standing_order');
 
 // connect producer when connecting to websocket interface
@@ -33,7 +30,7 @@ sock.onclose = () => {
   console.log('disconnected');
 };
 
-//! filter data stream messages for the messages related to the US region only and publish
+// filter data stream messages for the messages related to the US region only and publish
 const publish = async msg => {
   console.log('message received : ', msg);
   const latitude = msg.data.properties.lat;
@@ -81,12 +78,46 @@ const run = async () => {
         value: message.value?.toString(),
         key: message.key?.toString(),
       });
-      // TODO: connect to external db
-      fs.writeFileSync(
-        // path.resolve(__dirname, '/seismicDataUS.json'),
-        './seismicDataUS.json',
-        JSON.stringify(message.value),
-      );
+      if (message.value !== undefined) {
+        const data: any = message.value?.toString();
+        const obj = JSON.parse(data);
+        const values = Object.values(obj);
+        console.log('values', values);
+        // check if this is a newly reported earthquake or an update
+        let exists: boolean = false;
+        db.query(
+          `SELECT EXISTS (SELECT sp_id FROM earthquakes WHERE sp_id = $1)`,
+          [values[0]],
+        )
+          .then(data => {
+            console.log('exists', exists);
+            console.log('data', data);
+            exists = data;
+          })
+          .catch(err => console.log('error checking earthquake table:', err));
+
+        // update table if the message contains earthquake updates
+        if (exists) {
+          // update created_at column to reflect the update time
+          const date = new Date();
+          values.push(date.toISOString());
+          db.query(
+            'UPDATE earthquakes SET depth = $2, lat = $3, lon = $4, mag = $5, magtype = $6, time = $7, created_at = $8 WHERE sp_id = $1',
+            values,
+          )
+            .then(data => console.log(data.rows[0]))
+            .catch(err => console.log('error updating earthquake table', err));
+        }
+        // add earthquake to table if new earthquake report was received
+        else {
+          db.query(
+            'INSERT INTO earthquakes (sp_id, depth, lat, lon, mag, magtype, time) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+            values,
+          )
+            .then(data => console.log(data.rows[0]))
+            .catch(err => console.log('error inserting data into db: ', err));
+        }
+      }
     },
   });
 };

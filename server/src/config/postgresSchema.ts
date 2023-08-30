@@ -8,10 +8,10 @@ const pool = new Pool({
 });
 
 const db = {
-  query: (text, params, callback) => {
+  query: (text, params) => {
     console.log('executed query', text);
     console.log('query params', params);
-    return pool.query(text, params, callback);
+    return pool.query(text, params);
   },
 };
 
