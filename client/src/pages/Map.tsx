@@ -41,9 +41,6 @@ const [pointer, setpointer]= useState([]);
   const canvasHeight = 410
   
 
-  // Calculate the width and height of the canvas based on the aspect ratio and desired canvas width
-  
-
   useEffect(() => {
     const canvas = document.getElementById('ellipseCanvas') as HTMLCanvasElement;
     const ctx = canvas?.getContext('2d');
