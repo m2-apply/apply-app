@@ -19,12 +19,14 @@ type State = {
   unitHeight: number;
   settingNewPoint: boolean;
   setSettingNewPoint: boolean;
+  isDragging: boolean;
+  setIsDragging: boolean;
 };
 
 export const GlobalContext = createContext<State>({});
 
 // counting 0.5
-const multiplier: number = 3;
+const multiplier: number = 1;
 
 const longitude: number = (60 - 20) * multiplier;
 const latitude: number = (140 - 50) * multiplier;
@@ -33,11 +35,13 @@ export function GlobalProvider({ children }: Props) {
   const [loggedIn, setLoggedIn] = useState(false);
   const [userDetail, setUserDetail] = useState({});
   const [curPointer, setCurPointer] = useState([
+    // 0, 0,
     Math.floor(latitude / 2),
     Math.floor(longitude / 2),
   ]);
-  const [pointerRadius, setPointerRadius] = useState(10);
+  const [pointerRadius, setPointerRadius] = useState(188.06306306306);
   const [settingNewPoint, setSettingNewPoint] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const States: State = {
     isLoggedIn: loggedIn,
@@ -55,6 +59,8 @@ export function GlobalProvider({ children }: Props) {
     latitude: latitude,
     unitWidth: 1350 / latitude,
     unitHeight: 835 / longitude,
+    isDragging: isDragging,
+    setIsDragging: setIsDragging,
   };
 
   return (

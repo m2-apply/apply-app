@@ -12,6 +12,19 @@
   gap: 30px;
 }
 
+.slider {
+  &.faded {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+    &::-webkit-slider-thumb {
+      color: grey;
+    }
+    &::-webkit-slider-runnable-track {
+      color: rgb(199, 199, 199);
+    }
+  }
+}
 .genericButtonMap {
   font-weight: 600;
   height: 45px;
@@ -41,8 +54,9 @@
 }
 
 .mapCanvas {
-  border: 1px solid black;
-  height: 837px;
+  border: 2px solid #0279bc;
+  height: 835px;
+  overflow: hidden;
 }
 
 .board {

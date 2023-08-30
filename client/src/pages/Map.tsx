@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import '../styles/Map';
-import USAMap from '../assets/NorthAmerica.png';
+import USAMap from '../assets/NorthAmerica2.png';
 import { GlobalContext } from '../../state';
 import { Unit, Row } from '../components/Unit';
 import OurPoint from '../components/OurPoint';
@@ -21,7 +21,7 @@ const MapView = () => {
   };
 
   const handleChange = e => {
-    setPointerRadius(Number(e.target.value));
+    if (settingNewPoint) setPointerRadius(Number(e.target.value));
   };
 
   const handleLogout = () => {
@@ -41,14 +41,15 @@ const MapView = () => {
         <OurPoint x={curPointer[0]} y={curPointer[1]} />
       </div>
 
-      {pointerRadius}
+      <div>Approx Radius: {(pointerRadius * 5.3173652695).toFixed(2)}km</div>
 
       <div style={{ display: 'flex', gap: '5px' }}>
         <input
           type='range'
-          min='1'
-          max='100'
+          min='50'
+          max='500'
           value={pointerRadius}
+          class={`${settingNewPoint ? 'slider' : 'slider faded'}`}
           onChange={handleChange}></input>
       </div>
 

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { GlobalContext } from '../../state';
 import '../styles/Unit';
 
@@ -19,16 +19,37 @@ export const Row = props => {
 };
 
 export const Unit = (props: UnitProps) => {
-  const { setCurPointer, settingNewPoint } = useContext(GlobalContext);
+  const { setCurPointer, settingNewPoint, isDragging, setIsDragging } =
+    useContext(GlobalContext);
 
-  const handleMyPoint = (x, y) => {
-    if (settingNewPoint) setCurPointer([x, y]);
+  const handleDragOver = () => {
+    if (settingNewPoint && isDragging) {
+      console.log('handling');
+      setCurPointer([props.x, props.y]);
+    }
+  };
+
+  const handleGlobalMouseUp = () => {
+    console.log('global mouse up');
+    setIsDragging(false);
+    document.removeEventListener('mouseup', handleGlobalMouseUp);
+  };
+
+  const handleMouseDown = () => {
+    if (settingNewPoint) {
+      setCurPointer([props.x, props.y]);
+    }
+
+    console.log('mouse down');
+    setIsDragging(true);
+
+    document.addEventListener('mouseup', handleGlobalMouseUp);
   };
 
   return (
     <div
       className='unit'
-      onMouseDown={() => handleMyPoint(props.x, props.y)}
-      onClick={() => handleMyPoint(props.x, props.y)}></div>
+      onMouseDown={handleMouseDown}
+      onMouseOver={handleDragOver}></div>
   );
 };
