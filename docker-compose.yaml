@@ -6,6 +6,7 @@ services:
     volumes:
       - ./seismicData.ts:/seismicData.ts
       - ./topics.ts:/topics.ts
+      - ./server/src/config/postgresSchema.ts:/server/src/config/postgresSchema.ts
       - ./node_modules:/node_modules
       - ./tsconfig.json:/tsconfig.json
       - ./package.json:/package.json
