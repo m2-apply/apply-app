@@ -1,0 +1,11 @@
+$point: 15px;
+
+.point {
+  width: $point;
+  height: $point;
+  background: linear-gradient(to right, rgb(4, 125, 255), rgb(29, 188, 180));
+
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+}
