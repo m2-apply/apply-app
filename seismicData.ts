@@ -39,38 +39,37 @@ const publish = async msg => {
   const latitude = msg.data.properties.lat;
   const longitude = msg.data.properties.lon;
 
-  //   if (
-  //     latitude >= 20 &&
-  //     latitude <= 60 &&
-  //     longitude <= -50 &&
-  //     longitude >= -140
-  //   ) {
-  const filteredMsg = {
-    id: msg.data.id,
-    depth: msg.data.properties.depth,
-    lat: latitude,
-    lon: longitude,
-    mag: msg.data.properties.mag,
-    magtype: msg.data.properties.magtype,
-    time: msg.data.properties.time,
-  };
-  console.log('filteredMsg', filteredMsg);
+  if (
+    latitude >= 20 &&
+    latitude <= 60 &&
+    longitude <= -50 &&
+    longitude >= -140
+  ) {
+    const filteredMsg = {
+      id: msg.data.id,
+      depth: msg.data.properties.depth,
+      lat: latitude,
+      lon: longitude,
+      mag: msg.data.properties.mag,
+      magtype: msg.data.properties.magtype,
+      time: msg.data.properties.time,
+    };
+    console.log('filteredMsg', filteredMsg);
 
-  await producer.send({
-    topic: KafkaTopics.SeismicEventsUS,
-    messages: [
-      {
-        key: filteredMsg.id,
-        value: JSON.stringify(filteredMsg),
-      },
-    ],
-  });
-  //   }
+    await producer.send({
+      topic: KafkaTopics.SeismicEventsUS,
+      messages: [
+        {
+          key: filteredMsg.id,
+          value: JSON.stringify(filteredMsg),
+        },
+      ],
+    });
+  }
 };
 
 // connect consumer and subscribe to seismic topic
 const run = async () => {
-  //   await producer.connect();
   await consumer.connect();
 
   await consumer.subscribe({ topic: KafkaTopics.SeismicEventsUS });
@@ -82,7 +81,7 @@ const run = async () => {
         value: message.value?.toString(),
         key: message.key?.toString(),
       });
-      //   ! connect to external db
+      // TODO: connect to external db
       fs.writeFileSync(
         // path.resolve(__dirname, '/seismicDataUS.json'),
         './seismicDataUS.json',
